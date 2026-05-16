@@ -14,13 +14,14 @@
     }
   },
   "scripts": {
-    "build": "bun build ./src/index.ts --outfile ./dist/index.js --target node --format esm && bun build ./src/index.ts --outfile ./dist/index.cjs --target node --format cjs && tsc --emitDeclarationOnly",
+    "build": "tsup",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "zod": "catalog:"
   },
   "devDependencies": {
+    "tsup": "catalog:",
     "typescript": "catalog:"
   }
 }
