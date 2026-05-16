@@ -2,7 +2,11 @@ services:
   api:
     environment:
       NODE_ENV: development
-
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      OPENAI_BASE_URL: ${OPENAI_BASE_URL}
+      EMBEDDING_API_KEY: ${EMBEDDING_API_KEY}
+      VECTOR_DB_URL: ${VECTOR_DB_URL}
+      VECTOR_DB_API_KEY: ${VECTOR_DB_API_KEY}
   web:
     environment:
       NODE_ENV: development
