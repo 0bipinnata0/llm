@@ -1,9 +1,10 @@
 import { Module } from "@nestjs/common";
-import { LlmService } from "./llm.service";
 import { LlmController } from "./llm.controller";
+import { LlmService } from "./llm.service";
+import { RequirementService } from "./requirement.service";
 
 @Module({
-  providers: [LlmService],
+  providers: [LlmService, RequirementService],
   controllers: [LlmController],
   exports: [LlmService],
 })
