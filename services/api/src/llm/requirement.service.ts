@@ -1,6 +1,6 @@
-import { Injectable } from "@nestjs/common";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
-import { RequirementResultSchema, type RequirementResult } from "@repo/contracts";
+import { Injectable } from "@nestjs/common";
+import { type RequirementResult, RequirementResultSchema } from "@repo/contracts";
 import { createChatModel } from "./model.factory";
 import { REQUIREMENT_SYSTEM_PROMPT, REQUIREMENT_USER_TEMPLATE } from "./prompts/requirement.prompt";
 
