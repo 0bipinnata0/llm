@@ -2,6 +2,7 @@ import { type BaseMessage, HumanMessage, SystemMessage } from "@langchain/core/m
 import { Injectable } from "@nestjs/common";
 import { createChatModel } from "./model.factory";
 import { requirementPrompt } from "./requirement.prompt-builder";
+import { requirementChain } from "./requirement.chain";
 
 @Injectable()
 export class LlmService {
@@ -24,5 +25,16 @@ export class LlmService {
     const messages = await requirementPrompt.formatMessages({ input });
     const response = await this.model.invoke(messages);
     return { result: response.content };
+  }
+  async chainInvoke(input: string) {
+    const result = await requirementChain.invoke({ input });
+    return { result };
+  }
+  async chainStream(input: string) {
+    return requirementChain.stream({ input });
+  }
+  async chainBatch(inputs: string[]) {
+    const results = await requirementChain.batch(inputs.map((input) => ({ input })));
+    return results.map((result, i) => ({ index: i + 1, result }));
   }
 }
