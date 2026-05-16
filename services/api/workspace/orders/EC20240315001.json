@@ -1,0 +1,12 @@
+{
+  "orderId": "EC20240315001",
+  "customerId": "C10086",
+  "productId": "P-BT-NC-001",
+  "productName": "主动降噪蓝牙耳机 Pro",
+  "amount": 299,
+  "currency": "CNY",
+  "status": "已完成",
+  "createdAt": "2024-03-15T09:30:00Z",
+  "deliveredAt": "2024-03-18T14:00:00Z",
+  "returnWindowDays": 7
+}

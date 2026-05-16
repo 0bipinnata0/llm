@@ -1,4 +1,5 @@
 import { InMemoryChatMessageHistory } from "@langchain/core/chat_history";
+import { AIMessage } from "@langchain/core/messages";
 import { ChatPromptTemplate, MessagesPlaceholder } from "@langchain/core/prompts";
 import { RunnableWithMessageHistory } from "@langchain/core/runnables";
 import { Injectable } from "@nestjs/common";
@@ -7,7 +8,11 @@ import { createChatModel } from "../model.factory";
 @Injectable()
 export class RunnableMemoryService {
   private store = new Map<string, InMemoryChatMessageHistory>();
-  private model = createChatModel();
+  protected model = this.createModel();
+
+  protected createModel(): any {
+    return createChatModel();
+  }
 
   private prompt = ChatPromptTemplate.fromMessages([
     ["system", "你是一名电商客服助手，请结合历史对话理解用户诉求并给出回答。"],
@@ -32,7 +37,10 @@ export class RunnableMemoryService {
   });
 
   async chat(sessionId: string, input: string) {
-    const response = await this.withHistory.invoke({ input }, { configurable: { sessionId } });
+    const response = (await this.withHistory.invoke(
+      { input },
+      { configurable: { sessionId } },
+    )) as AIMessage;
     return { response: response.content };
   }
 

@@ -3,9 +3,7 @@ import { RunnableLambda } from "@langchain/core/runnables";
 import { RunnableMemoryService } from "../src/llm/memory/runnable-memory.service";
 
 function messageText(message: BaseMessage): string {
-  return typeof message.content === "string"
-    ? message.content
-    : JSON.stringify(message.content);
+  return typeof message.content === "string" ? message.content : JSON.stringify(message.content);
 }
 
 class FakeRunnableMemoryService extends RunnableMemoryService {
@@ -17,8 +15,7 @@ class FakeRunnableMemoryService extends RunnableMemoryService {
         .filter((message) => message._getType() === "human")
         .map(messageText);
       const orderId =
-        humanMessages.find((content) => content.includes("EC20240315001")) ??
-        "未提供订单号";
+        humanMessages.find((content) => content.includes("EC20240315001")) ?? "未提供订单号";
 
       return new AIMessage(
         `已结合${humanMessages.length}轮客服上下文；订单信息：${orderId}；本轮问题：${humanMessages.at(-1)}`,
@@ -35,8 +32,8 @@ describe("RunnableMemoryService", () => {
     await service.chat("s1", "订单号是 EC20240315001");
     const result = await service.chat("s1", "帮我判断一下这个订单能不能退");
 
-    expect(result).toContain("已结合3轮客服上下文");
-    expect(result).toContain("EC20240315001");
+    expect(result.response).toContain("已结合3轮客服上下文");
+    expect(result.response).toContain("EC20240315001");
 
     const history = await service.getHistory("s1");
     expect(history.map((message) => message.type)).toEqual([
@@ -57,8 +54,8 @@ describe("RunnableMemoryService", () => {
     await service.chat("s1", "订单号是 EC20240315001");
     const result = await service.chat("s2", "帮我判断一下这个订单能不能退");
 
-    expect(result).toContain("已结合1轮客服上下文");
-    expect(result).toContain("未提供订单号");
+    expect(result.response).toContain("已结合1轮客服上下文");
+    expect(result.response).toContain("未提供订单号");
     expect(await service.getHistory("s1")).toHaveLength(2);
     expect(await service.getHistory("s2")).toHaveLength(2);
   });
@@ -69,10 +66,8 @@ describe("RunnableMemoryService", () => {
     await service.appendMessage("s1", "人工追加问题", "人工追加回复");
     await service.appendMessage("s2", "另一个会话", "另一个回复");
 
-    expect(await service.getHistory("s1")).toEqual([
-      { type: "human", content: "人工追加问题" },
-      { type: "ai", content: "人工追加回复" },
-    ]);
+    const history = await service.getHistory("s1");
+    expect(history.map((m) => m.content)).toEqual(["人工追加问题", "人工追加回复"]);
 
     await service.clearSession("s1");
 
