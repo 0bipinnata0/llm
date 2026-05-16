@@ -1,19 +1,12 @@
-
-import { Controller, Get } from "@nestjs/common";
-import { APP_NAME } from "@repo/contracts";
-import { AppService } from "./app.service";
+import { Body, Controller, Post } from "@nestjs/common";
+import { RequirementService } from "./llm/requirement.service";
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly requirementService: RequirementService) {}
 
-  @Get("/health")
-  health() {
-    return { ok: true };
-  }
-
-  @Get("/hello")
-  hello() {
-    return { message: `Hello from API, shared APP_NAME=${APP_NAME}` };
+  @Post("/requirement/extract")
+  async extract(@Body() body: { input: string }) {
+    return this.requirementService.extract(body.input);
   }
 }

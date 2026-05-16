@@ -51,7 +51,7 @@ export class LlmService {
     ]);
 
     const response = await modelWithTools.invoke([
-      new SystemMessage("你可以按需要调用工具来校验约束和查询实体定义。"),
+      new SystemMessage("你可以按需要调用工具来校验约束和查询实体定义。2"),
       new HumanMessage(`请分析下面需求：${input}`),
     ]);
 
