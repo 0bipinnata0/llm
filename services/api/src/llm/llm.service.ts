@@ -1,10 +1,12 @@
 import { type BaseMessage, HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { Injectable } from "@nestjs/common";
 import { createChatModel } from "./model.factory";
+import { requirementPrompt } from "./requirement.prompt-builder";
 
 @Injectable()
 export class LlmService {
   private model = createChatModel();
+
   async invokeDemo(input: string): Promise<string> {
     const systemMessage = new SystemMessage("你是一名需求结构化抽取助手");
     const humanMessage = new HumanMessage(
@@ -13,5 +15,14 @@ export class LlmService {
     const messages: BaseMessage[] = [systemMessage, humanMessage];
     const response = await this.model.invoke(messages);
     return response.content.toString();
+  }
+  async promptPreview(input: string) {
+    const promptValue = await requirementPrompt.invoke({ input });
+    return { rendered: promptValue.toString() };
+  }
+  async promptToModel(input: string) {
+    const messages = await requirementPrompt.formatMessages({ input });
+    const response = await this.model.invoke(messages);
+    return { result: response.content };
   }
 }
